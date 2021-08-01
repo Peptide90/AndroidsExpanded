@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using Androids;
+using RimWorld;
 using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
@@ -6,11 +7,10 @@ using System.Linq;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
-using Androids;
 
 namespace AndroidsExpanded
 {
-  public class Building_DroneCrafter : Building_PawnCrafter
+    public class Building_DroneCrafter : Building_PawnCrafter
   {
     public bool repeatLastPawn = false;
     private Sustainer soundSustainer;
@@ -30,10 +30,12 @@ namespace AndroidsExpanded
           if (disabled)
             return;
           this.lastDef = def;
-          this.MakePawnAndInitCrafting(def);
-        }), MenuOptionPriority.Default, (Action)null, (Thing)null, 0.0f, (Func<Rect, bool>)null, (WorldObject)null)
+            this.MakePawnAndInitCrafting(def);
+        }),
+        MenuOptionPriority.Default, null, (Thing)null, 0.0f, (Func<Rect, bool>)null, (WorldObject)null)
+        //MenuOptionPriority.Default, (Action)null, (Thing)null, 0.0f, (Func<Rect, bool>)null, (WorldObject)null)
         {
-          Disabled = disabled
+            Disabled = disabled
         });
       }
       if (options.Count <= 0)
@@ -68,16 +70,16 @@ namespace AndroidsExpanded
         case CrafterStatus.Filling:
           if (!this.powerComp.PowerOn || Current.Game.tickManager.TicksGame % 300 != 0)
             break;
-          MoteMaker.ThrowSmoke(this.Position.ToVector3(), this.Map, 1f);
+          FleckMaker.ThrowSmoke(this.Position.ToVector3(), this.Map, 1f);
           break;
         case CrafterStatus.Crafting:
           if (this.powerComp.PowerOn && Current.Game.tickManager.TicksGame % 100 == 0)
           {
             for (int index = 0; index < 5; ++index)
-              MoteMaker.ThrowMicroSparks(this.Position.ToVector3() + new Vector3((float)Rand.Range(-1, 1), 0.0f, (float)Rand.Range(-1, 1)), this.Map);
+              FleckMaker.ThrowMicroSparks(this.Position.ToVector3() + new Vector3((float)Rand.Range(-1, 1), 0.0f, (float)Rand.Range(-1, 1)), this.Map);
             for (int index = 0; index < 3; ++index)
-              MoteMaker.ThrowSmoke(this.Position.ToVector3() + new Vector3(Rand.Range(-1f, 1f), 0.0f, Rand.Range(-1f, 1f)), this.Map, Rand.Range(0.5f, 0.75f));
-            MoteMaker.ThrowHeatGlow(this.Position, this.Map, 1f);
+              FleckMaker.ThrowSmoke(this.Position.ToVector3() + new Vector3(Rand.Range(-1f, 1f), 0.0f, Rand.Range(-1f, 1f)), this.Map, Rand.Range(0.5f, 0.75f));
+            FleckMaker.ThrowHeatGlow(this.Position, this.Map, 1f);
             if (this.soundSustainer == null || this.soundSustainer.Ended)
             {
               SoundDef craftingSound = this.printerProperties.craftingSound;
@@ -132,13 +134,15 @@ namespace AndroidsExpanded
         yield return gizmo;
         gizmo = (Gizmo)null;
       }
-      Command_Toggle commandToggle = new Command_Toggle();
-      commandToggle.defaultLabel = (string)"AndroidGizmoRepeatPawnCraftingLabel".Translate();
-      commandToggle.defaultDesc = (string)"AndroidGizmoRepeatPawnCraftingDescription".Translate();
-      commandToggle.icon = ContentFinder<Texture2D>.Get("ui/designators/PlanOn", true);
-      commandToggle.isActive = (Func<bool>)(() => this.repeatLastPawn);
-      commandToggle.toggleAction = (Action)(() => this.repeatLastPawn = !this.repeatLastPawn);
-      yield return (Gizmo)commandToggle;
+            Command_Toggle commandToggle = new Command_Toggle
+            {
+                defaultLabel = (string)"AndroidGizmoRepeatPawnCraftingLabel".Translate(),
+                defaultDesc = (string)"AndroidGizmoRepeatPawnCraftingDescription".Translate(),
+                icon = ContentFinder<Texture2D>.Get("ui/designators/PlanOn", true),
+                isActive = (Func<bool>)(() => this.repeatLastPawn),
+                toggleAction = (Action)(() => this.repeatLastPawn = !this.repeatLastPawn)
+            };
+            yield return (Gizmo)commandToggle;
     }
   }
 }
