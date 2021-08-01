@@ -31,7 +31,7 @@ namespace AndroidsExpanded
             return;
           this.lastDef = def;
           this.MakePawnAndInitCrafting(def);
-        }), MenuOptionPriority.Default, (Action)null, (Thing)null, 0.0f, (Func<Rect, bool>)null, (WorldObject)null)
+        }), MenuOptionPriority.Default, null, (Thing)null, 0.0f, (Func<Rect, bool>)null, (WorldObject)null)
         {
           Disabled = disabled
         });
@@ -68,16 +68,16 @@ namespace AndroidsExpanded
         case CrafterStatus.Filling:
           if (!this.powerComp.PowerOn || Current.Game.tickManager.TicksGame % 300 != 0)
             break;
-          MoteMaker.ThrowSmoke(this.Position.ToVector3(), this.Map, 1f);
+          FleckMaker.ThrowSmoke(this.Position.ToVector3(), this.Map, 1f);
           break;
         case CrafterStatus.Crafting:
           if (this.powerComp.PowerOn && Current.Game.tickManager.TicksGame % 100 == 0)
           {
             for (int index = 0; index < 5; ++index)
-              MoteMaker.ThrowMicroSparks(this.Position.ToVector3() + new Vector3((float)Rand.Range(-1, 1), 0.0f, (float)Rand.Range(-1, 1)), this.Map);
+              FleckMaker.ThrowMicroSparks(this.Position.ToVector3() + new Vector3((float)Rand.Range(-1, 1), 0.0f, (float)Rand.Range(-1, 1)), this.Map);
             for (int index = 0; index < 3; ++index)
-              MoteMaker.ThrowSmoke(this.Position.ToVector3() + new Vector3(Rand.Range(-1f, 1f), 0.0f, Rand.Range(-1f, 1f)), this.Map, Rand.Range(0.5f, 0.75f));
-            MoteMaker.ThrowHeatGlow(this.Position, this.Map, 1f);
+              FleckMaker.ThrowSmoke(this.Position.ToVector3() + new Vector3(Rand.Range(-1f, 1f), 0.0f, Rand.Range(-1f, 1f)), this.Map, Rand.Range(0.5f, 0.75f));
+            FleckMaker.ThrowHeatGlow(this.Position, this.Map, 1f);
             if (this.soundSustainer == null || this.soundSustainer.Ended)
             {
               SoundDef craftingSound = this.printerProperties.craftingSound;
