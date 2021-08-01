@@ -1,5 +1,4 @@
-﻿using Androids;
-using RimWorld;
+﻿using RimWorld;
 using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
@@ -7,10 +6,11 @@ using System.Linq;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
+using Androids;
 
 namespace AndroidsExpanded
 {
-    public class Building_DroneCrafter : Building_PawnCrafter
+  public class Building_DroneCrafter : Building_PawnCrafter
   {
     public bool repeatLastPawn = false;
     private Sustainer soundSustainer;
@@ -30,12 +30,10 @@ namespace AndroidsExpanded
           if (disabled)
             return;
           this.lastDef = def;
-            this.MakePawnAndInitCrafting(def);
-        }),
-        MenuOptionPriority.Default, null, (Thing)null, 0.0f, (Func<Rect, bool>)null, (WorldObject)null)
-        //MenuOptionPriority.Default, (Action)null, (Thing)null, 0.0f, (Func<Rect, bool>)null, (WorldObject)null)
+          this.MakePawnAndInitCrafting(def);
+        }), MenuOptionPriority.Default, null, (Thing)null, 0.0f, (Func<Rect, bool>)null, (WorldObject)null)
         {
-            Disabled = disabled
+          Disabled = disabled
         });
       }
       if (options.Count <= 0)
@@ -134,15 +132,13 @@ namespace AndroidsExpanded
         yield return gizmo;
         gizmo = (Gizmo)null;
       }
-            Command_Toggle commandToggle = new Command_Toggle
-            {
-                defaultLabel = (string)"AndroidGizmoRepeatPawnCraftingLabel".Translate(),
-                defaultDesc = (string)"AndroidGizmoRepeatPawnCraftingDescription".Translate(),
-                icon = ContentFinder<Texture2D>.Get("ui/designators/PlanOn", true),
-                isActive = (Func<bool>)(() => this.repeatLastPawn),
-                toggleAction = (Action)(() => this.repeatLastPawn = !this.repeatLastPawn)
-            };
-            yield return (Gizmo)commandToggle;
+      Command_Toggle commandToggle = new Command_Toggle();
+      commandToggle.defaultLabel = (string)"AndroidGizmoRepeatPawnCraftingLabel".Translate();
+      commandToggle.defaultDesc = (string)"AndroidGizmoRepeatPawnCraftingDescription".Translate();
+      commandToggle.icon = ContentFinder<Texture2D>.Get("ui/designators/PlanOn", true);
+      commandToggle.isActive = (Func<bool>)(() => this.repeatLastPawn);
+      commandToggle.toggleAction = (Action)(() => this.repeatLastPawn = !this.repeatLastPawn);
+      yield return (Gizmo)commandToggle;
     }
   }
 }
